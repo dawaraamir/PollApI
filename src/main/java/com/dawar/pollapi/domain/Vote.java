@@ -1,5 +1,8 @@
 package com.dawar.pollapi.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,6 +13,7 @@ public class Vote {
     private Long id;
     @ManyToOne
     @JoinColumn(name="OPTION_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Option option;
 
     public Long getId() {

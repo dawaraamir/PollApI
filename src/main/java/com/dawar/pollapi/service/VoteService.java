@@ -15,6 +15,10 @@ public class VoteService {
         voteRepository.save(vote);
     }
 
+    public void deleteVote(Long voteId){
+        voteRepository.deleteById(voteId);
+    }
+
     public Iterable<Vote> getAllVotes(Long pollId) {
         return voteRepository.findByPoll(pollId);
     }
