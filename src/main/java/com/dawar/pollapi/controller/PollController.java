@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -24,8 +26,11 @@ public class PollController {
     @Autowired
     private PollRepo pollRepository;
 
-    protected void verifyPoll(Long pollId) throws ResourceNotFoundException {
-     pollService.verifyPoll(pollId);
+    public void verifyPoll(Long pollId) throws ResourceNotFoundException {
+        Optional<Poll> poll = pollService.getPoll(pollId);
+        if (poll.isEmpty()) {
+            throw new ResourceNotFoundException("Poll with id " + pollId + " not found");
+        }
     }
 
     @RequestMapping(value = "/polls", method = RequestMethod.GET)
@@ -49,6 +54,7 @@ public class PollController {
 
     @RequestMapping(value="/polls/{pollId}", method=RequestMethod.GET)
     public ResponseEntity<?> getPoll(@PathVariable Long pollId) {
+        verifyPoll(pollId);
          pollService.getPoll(pollId);
         return new ResponseEntity<>(pollRepository.findById(pollId), HttpStatus.OK);
     }
